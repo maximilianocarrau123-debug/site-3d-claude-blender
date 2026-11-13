@@ -1,0 +1,69 @@
+/* core · design tokens · 2026-09-29 — fonte: DESIGN.md */
+@font-face{font-family:Dotemp;src:url(../fonts/DotempRegular.ttf)}
+@font-face{font-family:DotempPx;src:url(../fonts/Dotemp8bit.ttf)}
+/* <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap" rel="stylesheet"> */
+:root{
+  /* cor — principal */
+  --c-void:#050507; --c-ink:#F2F3FF; --c-light:#CCD8FC;
+  --c-blue:#3C48E4; --c-blue-hi:#486CF0; --c-blue-deep:#2430CC; --c-blue-soft:#6C8BFF;
+  --g-blue:linear-gradient(90deg,#2430CC,#3C48E4,#486CF0,#CCD8FC);
+  /* cor — neutros azulados */
+  --c-text-2:#B4B9DA; --c-text-3:#9AA0C8; --c-text-4:#8A8FB4; --c-mute:#6B6F8E; --c-mute-2:#4D5173;
+  --c-line:#1D1F2E; --c-line-2:#2A2E4A; --c-deep:#0D1238; --c-track:#1A1D36; --c-section-rule:#FFFFFF0D;
+  /* cor — apoio */
+  --c-alert:#FF5F57; --c-win-y:#FEBC2E; --c-win-g:#28C840;
+  /* tipo */
+  --f-display:Dotemp, Georgia, serif;      /* sempre italic */
+  --f-pixel:DotempPx, monospace;           /* sempre normal */
+  --f-body:Geist, system-ui, sans-serif;
+  --f-mono:'Geist Mono', ui-monospace, monospace;
+  --t-hero:400 clamp(44px,7.4vw,112px)/1 var(--f-display);
+  --t-h2:400 clamp(40px,5.2vw,84px)/1.02 var(--f-display);
+  --t-h2-end:400 clamp(44px,6vw,100px)/1 var(--f-display);
+  --t-h3:400 clamp(30px,3.2vw,46px)/1.05 var(--f-display);
+  --t-card:400 22px/1.1 var(--f-display);
+  --t-stat:400 clamp(40px,4vw,72px)/1 var(--f-pixel);
+  --t-lead:400 17px/1.55 var(--f-body);
+  --t-body:400 15px/1.6 var(--f-body);
+  --t-kicker:500 11px/1 var(--f-mono);     /* uppercase, .14em */
+  --t-label:500 10.5px/1 var(--f-mono);    /* uppercase, .12em */
+  --t-btn:600 16px/1 var(--f-body);
+  --ls-kicker:.14em; --ls-label:.12em; --ls-display:-.01em;
+  /* layout */
+  --w-wide:1200px; --w-main:1100px; --w-read:960px; --w-end:880px;
+  --gutter:64px; --gutter-m:16px; --sec-y:130px; --sec-y-m:90px; --bp:900px;
+  /* raio */
+  --r-0:0; --r-pill:999px; --r-card:22px; --r-panel:10px; --r-panel-in:8px; --r-media:14px; --r-soft:6px;
+  /* vidro */
+  --glass-bg:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03));
+  --glass-bg-nav:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05));
+  --glass-blur:blur(18px) saturate(180%) brightness(1.1);
+  --glass-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.06),inset 0 0 0 1px rgba(255,255,255,.12),0 18px 50px rgba(0,0,0,.45);
+  --glass-shine:radial-gradient(120% 70% at 18% -20%,rgba(255,255,255,.28),transparent 45%),radial-gradient(90% 60% at 95% 120%,rgba(120,140,255,.22),transparent 60%);
+  /* sombra / brilho */
+  --sh-card:0 18px 50px rgba(0,0,0,.45); --sh-card-hover:0 26px 70px rgba(36,48,204,.45);
+  --sh-btn:inset 0 1px 0 rgba(255,255,255,.4),0 10px 40px rgba(60,72,228,.5);
+  --sh-btn-hover:inset 0 1px 0 rgba(255,255,255,.5),0 16px 50px rgba(72,108,240,.7);
+  --glow-dot:0 0 12px #3C48E4; --glow-text:0 0 30px #3C48E4;
+  /* motion */
+  --e-out:cubic-bezier(.2,.8,.2,1); --e-expo:cubic-bezier(.16,1,.3,1); --e-inout:cubic-bezier(.7,0,.2,1);
+  --e-draw:cubic-bezier(.6,0,.2,1); --e-spring:cubic-bezier(.3,1.2,.4,1);
+  --d-hover:.3s; --d-reveal:.9s; --d-curtain:1.2s; --d-count:1.6s; --d-draw:1.8s; --d-pulse:3.2s; --d-marquee:52s;
+}
+/* base */
+*{box-sizing:border-box;margin:0}
+body{background:var(--c-void);color:var(--c-ink);font-family:var(--f-body)}
+.k{font:var(--t-kicker);letter-spacing:var(--ls-kicker);text-transform:uppercase;color:var(--c-text-3)}
+.h2{font:var(--t-h2);font-style:italic}
+.h2 i,.h2 em{font-family:var(--f-pixel);font-style:normal;color:var(--c-light);white-space:nowrap}
+.lead{font:var(--t-lead);color:var(--c-text-3)}
+.rise{opacity:0;transform:translateY(28px);transition:opacity var(--d-reveal),transform var(--d-reveal) var(--e-out)}
+.rise.up{opacity:1;transform:none}
+.glass{position:relative;background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);border-radius:var(--r-card)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:var(--glass-shine)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:var(--r-0);background:var(--c-blue);color:#fff;font:var(--t-btn);text-decoration:none;cursor:pointer;border:0;box-shadow:var(--sh-btn);transition:transform var(--d-hover) var(--e-out),background var(--d-hover),box-shadow var(--d-hover)}
+.btn:hover{transform:translateY(-2px);background:var(--c-blue-hi);box-shadow:var(--sh-btn-hover)}
+.btn svg{transition:transform var(--d-hover)}.btn:hover svg{transform:translateX(4px)}
+.btn.ghost{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04)),rgba(5,5,7,.45);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 0 1px rgba(255,255,255,.14)}
+.btn.pill{border-radius:var(--r-pill);padding:12px 20px;font-size:14px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

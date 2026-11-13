@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elísio 660 · apartamento em 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+@font-face{font-family:Dotemp;src:url(fonts/DotempRegular.ttf);font-display:swap}
+@font-face{font-family:DotempPx;src:url(fonts/Dotemp8bit.ttf);font-display:swap}
+*{box-sizing:border-box;margin:0}
+html,body{background:#050507;color:#F2F3FF;font:16px/1.6 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.mono{font:500 11px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(70% 60% at 62% 62%,rgba(36,48,204,.36),transparent 70%),radial-gradient(40% 36% at 26% 26%,rgba(72,108,240,.16),transparent 70%)}
+/* título gigante atrás do prédio (ref. LeonHome) */
+#mega{position:fixed;left:0;right:0;top:15vh;z-index:0;text-align:center;pointer-events:none;white-space:nowrap;
+  font:400 clamp(90px,19vw,330px)/.9 Dotemp;font-style:italic;color:#F2F3FF;opacity:.13;letter-spacing:-.02em;transition:opacity .6s}
+#mega i{font-family:DotempPx;font-style:normal;color:#CCD8FC}
+#stage{position:fixed;inset:0;width:100vw;height:100vh;height:100svh;z-index:1;display:block;cursor:grab;opacity:0;transition:opacity 1.4s cubic-bezier(.2,.8,.2,1);touch-action:pan-y}
+.loaded #stage{opacity:1}
+#load{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;color:#9AA0C8;transition:opacity .6s;pointer-events:none}
+#load span{display:block;height:1px;margin-top:12px;background:linear-gradient(90deg,transparent,#3C48E4,transparent);animation:ld 1.4s infinite}
+@keyframes ld{0%{transform:scaleX(.1)}50%{transform:scaleX(1)}100%{transform:scaleX(.1)}}
+.loaded #load{opacity:0}.dragging #stage{cursor:grabbing}
+#pin{position:fixed;left:0;top:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .4s;display:flex;flex-direction:column;align-items:center}
+#pin b{padding:7px 11px;border-radius:999px;background:#3C48E4;color:#fff;font:500 10px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;box-shadow:0 10px 40px rgba(60,72,228,.6),inset 0 1px 0 rgba(255,255,255,.4)}
+#pin::after{content:"";width:1px;height:26px;background:linear-gradient(#8AA2FF,transparent)}
+
+/* navbar de vidro */
+#nav{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:26px;padding:9px 10px 9px 22px;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 0 1px rgba(255,255,255,.12),0 18px 50px rgba(0,0,0,.45)}
+.wm{font:400 26px/1 Dotemp;font-style:italic;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.wm b{font-family:DotempPx;font-weight:400;font-style:normal;color:#CCD8FC}
+.wm small{font:500 9.5px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#8A8FB4;font-style:normal}
+#nav nav{display:flex;gap:22px}#nav nav a{font:500 14px Geist;color:#B4B9DA;text-decoration:none;transition:color .3s}#nav nav a:hover{color:#fff}
+.cta{padding:11px 18px;border-radius:999px;background:#3C48E4;color:#fff;font:600 14px Geist;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 40px rgba(60,72,228,.5);transition:all .3s}
+.cta:hover{background:#486CF0;transform:translateY(-1px)}
+
+main{position:relative;z-index:3;pointer-events:none}
+section{min-height:130vh;padding:0 64px;display:flex;align-items:center;max-width:1440px;margin:0 auto}
+section.r{justify-content:flex-end;padding-right:120px}
+.card{pointer-events:auto;width:min(430px,100%);padding:30px 30px 28px;border-radius:22px;position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03)),rgba(5,5,7,.4);
+  -webkit-backdrop-filter:blur(18px) saturate(180%) brightness(1.1);backdrop-filter:blur(18px) saturate(180%) brightness(1.1);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.06),inset 0 0 0 1px rgba(255,255,255,.12),0 18px 50px rgba(0,0,0,.45)}
+.kicker{font:500 11px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#9AA0C8}
+h1,h2{font-weight:400;font-family:Dotemp;font-style:italic}
+h1{font-size:clamp(44px,6vw,92px);line-height:1;margin:18px 0 20px;text-shadow:0 2px 30px #0008}
+h2{font-size:clamp(38px,4.2vw,62px);line-height:1.02;margin:14px 0 14px}
+h1 i,h2 i{font-family:DotempPx;font-style:normal;color:#CCD8FC;white-space:nowrap}
+.card p,.lead{color:#B4B9DA;font-size:16px;line-height:1.6}
+.lead{font-size:17px;color:#C9CEEA;max-width:440px}
+.stats{display:flex;gap:26px;margin-top:22px;padding-top:18px;border-top:1px solid #1D1F2E;flex-wrap:wrap}
+.stats b{display:block;font:400 34px/1 DotempPx;color:#CCD8FC;text-shadow:0 0 24px #3C48E488}
+.stats span{font:500 10px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B6F8E}
+.rise{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.rise.up{opacity:1;transform:none}
+
+/* hero */
+#hero{min-height:100vh;min-height:100svh;align-items:flex-end;padding-bottom:9vh;position:relative}
+#hero::before{content:"";position:absolute;left:-20vw;bottom:0;width:75vw;height:80vh;background:radial-gradient(closest-side,rgba(5,5,7,.78),transparent);z-index:-1;pointer-events:none}
+#hero .in{pointer-events:auto;max-width:560px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 28px}
+.chips span{padding:8px 13px;border-radius:999px;border:1px solid #2A2E4A;background:rgba(5,5,7,.5);font:500 10.5px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#CCD8FC;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:0;background:#3C48E4;color:#fff;font:600 16px Geist;text-decoration:none;border:0;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 40px rgba(60,72,228,.5);transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.btn:hover{transform:translateY(-2px);background:#486CF0;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 16px 50px rgba(72,108,240,.7)}
+.btn svg{transition:transform .35s}.btn:hover svg{transform:translateX(4px)}.btn.gh:hover svg{transform:translateY(4px)}
+.btn.gh{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04)),rgba(5,5,7,.45);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 1px 0 rgba(255,255,255,.35)}
+.float{position:absolute;right:64px;bottom:10vh;pointer-events:auto;display:flex;flex-direction:column;gap:12px}
+.float .card{width:210px;padding:18px 20px}
+.float b{display:block;font:400 44px/1 DotempPx;color:#CCD8FC;text-shadow:0 0 24px #3C48E488}
+.float span{font:500 10px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8A8FB4}
+
+/* simulador de sol */
+#sol .card{width:min(470px,100%)}
+.row{margin-top:20px}.row>.kicker{display:block;margin-bottom:10px;color:#6B6F8E;font-size:10px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.seg button{height:38px;border:1px solid #2A2E4A;background:transparent;color:#B4B9DA;font:500 11px 'Geist Mono',monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.seg button:hover{border-color:#486CF0;color:#fff}
+.seg button.on{background:#3C48E4;border-color:#3C48E4;color:#fff;box-shadow:0 0 18px rgba(60,72,228,.6)}
+.clock{display:flex;align-items:center;gap:14px}
+.clock output{font:400 46px/1 DotempPx;color:#CCD8FC;text-shadow:0 0 24px #3C48E488;min-width:132px}
+#play{width:44px;height:44px;border-radius:50%;border:1px solid #2A2E4A;background:rgba(255,255,255,.06);color:#fff;cursor:pointer;display:grid;place-items:center;transition:all .3s;flex:none}
+#play:hover{border-color:#486CF0;background:#3C48E4}
+#now{font:500 10.5px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#9AA0C8;display:flex;align-items:center;gap:8px}
+#now::before{content:"";width:8px;height:8px;border-radius:50%;background:#4D5173}
+#now.sun{color:#FFD9A0}#now.sun::before{background:#FFD08A;box-shadow:0 0 14px #FFB45A}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;margin:16px 0 4px;border-radius:4px;outline:0;cursor:pointer;
+  background:linear-gradient(90deg,#0D1238,#2430CC 22%,#FFB45A 30%,#FFF3E2 50%,#FFB45A 70%,#2430CC 78%,#0D1238)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#F2F3FF;border:4px solid #3C48E4;box-shadow:0 0 18px #3C48E4}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#F2F3FF;border:4px solid #3C48E4}
+.ticks{display:flex;justify-content:space-between;font:500 9.5px 'Geist Mono',monospace;letter-spacing:.1em;color:#4D5173}
+.note{margin-top:16px;font-size:12.5px;color:#6B6F8E;line-height:1.5}
+
+#rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:4;display:flex;flex-direction:column;gap:13px;align-items:flex-end}
+#rail a{display:flex;align-items:center;gap:10px;font:500 10px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#CCD8FC;text-decoration:none}
+#rail a::after{content:"";width:6px;height:6px;border-radius:50%;background:#2A2E4A;transition:all .35s}
+#rail a span{opacity:0;transform:translateX(6px);transition:all .35s;padding:4px 8px;border-radius:999px;background:rgba(5,5,7,.7)}
+#rail a:hover span{opacity:1;transform:none}
+#rail a.on::after{background:#3C48E4;box-shadow:0 0 14px #3C48E4;transform:scale(1.5)}
+footer{position:relative;z-index:3;border-top:1px solid #FFFFFF0D;padding:26px 64px 34px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;background:rgba(5,5,7,.82);font-size:12.5px;color:#6B6F8E}
+@media (max-width:900px){
+  section{padding:0 16px 9vh;align-items:flex-end;min-height:125vh}
+  section.r{justify-content:flex-start;padding-right:16px}.card{padding:22px}#rail,#nav nav,.float{display:none}
+  #nav{left:10px;right:10px;transform:none;justify-content:space-between}
+  #hero{padding-bottom:5vh}h1{font-size:44px}.clock output{font-size:38px;min-width:108px}footer{padding:22px 16px}
+  #mega{top:11vh}
+  h2{font-size:34px;margin:10px 0}.card p{font-size:14.5px}.stats{margin-top:14px;padding-top:12px;gap:20px}.stats b{font-size:26px}
+  #sol .card>p,#sol .note{display:none}.row{margin-top:14px}.seg button{height:34px;font-size:10px;letter-spacing:.06em}
+  #hero .lead{font-size:15px}.chips{margin:16px 0 18px}.btn{padding:14px 20px}
+}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div id="glow"></div>
+<div id="mega" aria-hidden="true">Elísio <i>660</i></div>
+<canvas id="stage"></canvas>
+<div id="load" class="mono">Carregando o prédio<span></span></div>
+<div id="pin"><b>Sua unidade · 18º andar</b></div>
+
+<header id="nav">
+  <a class="wm" href="#hero">c<b>o</b>re <small>imóveis</small></a>
+  <nav><a href="#unidade">A unidade</a><a href="#sala">Por dentro</a><a href="#sol">Sol</a><a href="#planta">Planta</a></nav>
+  <a class="cta" href="#planta">Agendar visita</a>
+</header>
+<nav id="rail"></nav>
+
+<main>
+<section id="hero" data-scene="hero" data-name="O prédio">
+  <div class="in">
+    <div class="kicker">Vila Brasilândia · São Paulo · pronto pra morar</div>
+    <h1>Entre no apê antes de <i>visitar.</i></h1>
+    <p class="lead">Role a página e um drone te leva do prédio inteiro até dentro da unidade. Depois, veja em que horas o sol bate na sua varanda.</p>
+    <div class="chips"><span>2 quartos</span><span>42 m²</span><span>Varanda</span><span>1 vaga</span><span>Piscina</span></div>
+    <div class="btns">
+      <a class="btn" href="#unidade">Quero voar até o apê <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn gh" href="#sol">Ver o sol <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+    </div>
+  </div>
+  <div class="float">
+    <div class="card"><b>28</b><span>andares na torre</span></div>
+    <div class="card"><b>42 m²</b><span>planta de 2 quartos</span></div>
+  </div>
+</section>
+
+<section id="unidade" class="r" data-scene="unidade" data-name="A unidade">
+  <div class="card rise"><div class="kicker">01 / A unidade</div><h2>18º andar, de <i>frente</i> pro bairro.</h2>
+  <p>A moldura azul marca o apartamento na fachada. Continue rolando: a câmera atravessa a varanda e o prédio some pra você ver por dentro.</p>
+  <div class="stats"><div><b>56 m</b><span>acima da rua</span></div><div><b>42 m²</b><span>área privativa</span></div></div></div>
+</section>
+
+<section id="sala" data-scene="sala" data-name="Sala integrada"><div class="card rise"><div class="kicker">02 / Sala integrada</div><h2>Estar e jantar no <i>mesmo</i> ambiente.</h2><p>Mesa de quatro lugares, sofá de frente pra TV e porta de vidro abrindo pra varanda. A luz atravessa a sala inteira.</p><div class="stats"><div><b>4,05 m</b><span>profundidade</span></div><div><b>4,28 m</b><span>largura</span></div></div></div></section>
+<section id="cozinha" class="r" data-scene="cozinha" data-name="Cozinha"><div class="card rise"><div class="kicker">03 / Cozinha</div><h2>Linear, tudo ao alcance da <i>mão.</i></h2><p>Geladeira, cuba e cooktop numa bancada só de granito. Aberta pra sala: quem cozinha participa da conversa.</p><div class="stats"><div><b>2,50 m</b><span>bancada</span></div><div><b>4 bocas</b><span>cooktop</span></div></div></div></section>
+<section id="casal" data-scene="casal" data-name="Quarto de casal"><div class="card rise"><div class="kicker">04 / Quarto de casal</div><h2>Cabe cama <i>queen</i> e ainda sobra.</h2><p>Armário de três portas embutido, dois criados e janela larga. A TV fica na parede em frente à cama.</p><div class="stats"><div><b>3,04 m</b><span>comprimento</span></div><div><b>2,45 m</b><span>largura</span></div></div></div></section>
+<section id="solteiro" class="r" data-scene="solteiro" data-name="Segundo quarto"><div class="card rise"><div class="kicker">05 / Segundo quarto</div><h2>Quarto, escritório ou os <i>dois.</i></h2><p>Cama de solteiro, bancada de trabalho ao lado da janela e armário próprio. Home office sem tomar a sala.</p><div class="stats"><div><b>2,45 m</b><span>largura</span></div><div><b>2,23 m</b><span>comprimento</span></div></div></div></section>
+<section id="banho" data-scene="banho" data-name="Banheiro"><div class="card rise"><div class="kicker">06 / Banheiro</div><h2>Box de vidro e bancada de <i>granito.</i></h2><p>Gabinete com cuba de apoio, bacia com caixa acoplada e box largo com porta de vidro.</p><div class="stats"><div><b>2,16 m</b><span>largura</span></div><div><b>1,20 m</b><span>profundidade</span></div></div></div></section>
+<section id="varanda" class="r" data-scene="varanda" data-name="Varanda e serviço"><div class="card rise"><div class="kicker">07 / Varanda e serviço</div><h2>Uma varanda pra <i>respirar.</i></h2><p>Guarda-corpo de vidro e espaço pras plantas. A área de serviço fica ao lado, com tanque e máquina, fora da vista da sala.</p><div class="stats"><div><b>4,16 m</b><span>frente</span></div><div><b>1,80 m</b><span>serviço</span></div></div></div></section>
+
+<section id="sol" data-scene="sol" data-name="Sol" style="min-height:170vh">
+  <div class="card rise">
+    <div class="kicker">08 / Sol</div><h2>Veja onde o sol <i>bate.</i></h2>
+    <p>Escolha a estação e arraste a hora. A sombra dentro do apartamento é calculada pela posição real do sol em São Paulo.</p>
+    <div class="row"><span class="kicker">Estação do ano</span>
+      <div class="seg" id="season"><button data-v="verao">Verão</button><button data-v="outono" class="on">Outono</button><button data-v="inverno">Inverno</button><button data-v="primavera">Primavera</button></div></div>
+    <div class="row"><span class="kicker">Hora do dia</span>
+      <div class="clock"><button id="play" aria-label="Passar o dia"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg></button><output id="hh">15:30</output><span id="now">—</span></div>
+      <input id="hour" type="range" min="4" max="20" step="0.05" value="15.5" aria-label="Hora do dia">
+      <div class="ticks"><span>04h</span><span>08h</span><span>12h</span><span>16h</span><span>20h</span></div></div>
+    <div class="row"><span class="kicker">Varanda virada pra</span>
+      <div class="seg" id="facing"><button data-v="0" class="on">Norte</button><button data-v="90">Leste</button><button data-v="180">Sul</button><button data-v="270">Oeste</button></div></div>
+    <div class="stats"><div><b id="s-rise">--:--</b><span>nascer do sol</span></div><div><b id="s-set">--:--</b><span>pôr do sol</span></div><div><b id="s-dir">--</b><span>sol na varanda / dia</span></div></div>
+    <p class="note">Cada unidade do prédio aponta pra um lado. Troque a face da varanda pra comparar. A orientação desta unidade é ilustrativa: confirme na implantação da construtora.</p>
+  </div>
+</section>
+
+<section id="planta" data-scene="planta" data-name="Planta">
+  <div class="card rise"><div class="kicker">09 / Planta</div><h2>Do desenho à <i>visita.</i></h2>
+  <p>Você viu o prédio, entrou na unidade e conferiu o sol. Falta só pisar lá dentro.</p>
+  <div class="stats"><div><b>42 m²</b><span>área privativa</span></div><div><b>2</b><span>quartos</span></div><div><b>1</b><span>vaga</span></div></div>
+  <div class="btns" style="margin-top:24px"><a class="btn" href="#hero" style="width:100%;justify-content:center">Quero agendar uma visita <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+</section>
+</main>
+<footer><span>Demonstração construída ao vivo com Claude Fable 5.2 + Blender. Sem vínculo com a construtora do empreendimento.</span><span>Modelo 3D aproximado a partir da planta e de duas fotos. Orientação solar ilustrativa.</span></footer>
+
+<script type="module">
+import { ready, poses, setGoal, sunState, applySun, sunStats } from './scene.js';
+ready.catch(e => console.error('GLB', e));
+const $ = s => document.querySelector(s);
+const secs = [...document.querySelectorAll('[data-scene]')], rail = $('#rail'), mega = $('#mega');
+secs.forEach(s => { const a = document.createElement('a'); a.href = '#' + s.id; a.innerHTML = '<span>' + s.dataset.name + '</span>'; rail.append(a); });
+const dots = [...rail.children];
+const ease = t => t * t * (3 - 2 * t), mix = (a, b, t) => a + (b - a) * t;
+// Coreografia: acha entre quais duas seções o meio da tela está e mistura as duas poses.
+function choreo() {
+  const mid = innerHeight / 2;
+  const c = secs.map(s => { const r = s.getBoundingClientRect(); return r.top + r.height / 2; });
+  let i = 0; while (i < c.length - 2 && c[i + 1] < mid) i++;
+  let t = Math.min(1, Math.max(0, (mid - c[i]) / (c[i + 1] - c[i])));
+  t = ease(Math.min(1, Math.max(0, (t - 0.2) / 0.6)));              // segura a pose no miolo, viaja na passagem
+  const A = poses[secs[i].dataset.scene], B = poses[secs[i + 1].dataset.scene];
+  setGoal({ t: A.t.map((v, k) => mix(v, B.t[k], t)), az: mix(A.az, B.az, t), el: mix(A.el, B.el, t),
+    d: Math.exp(mix(Math.log(A.d), Math.log(B.d), t)), x: mix(A.x, B.x, t), y: mix(A.y, B.y, t), ext: mix(A.ext, B.ext, t), arc: mix(A.arc, B.arc, t) });
+  const on = t > 0.5 ? i + 1 : i; dots.forEach((d, k) => d.classList.toggle('on', k === on));
+  mega.style.opacity = i === 0 ? 0.13 * (1 - t) : 0;
+}
+addEventListener('scroll', choreo, { passive: true }); addEventListener('resize', choreo); choreo();
+const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('up', e.isIntersecting)), { threshold: .3 });
+document.querySelectorAll('.rise').forEach(el => io.observe(el));
+
+// ---- simulador de sol ----
+const hour = $('#hour'), hh = $('#hh'), now = $('#now');
+const fmt = h => { if (h == null) return '--:--'; const m = Math.round(h * 60); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+function sunUI() {
+  applySun();
+  const s = sunStats();
+  hh.textContent = fmt(sunState.hour);
+  $('#s-rise').textContent = fmt(s.rise); $('#s-set').textContent = fmt(s.set);
+  const dm = Math.round(s.direct * 60); $('#s-dir').textContent = dm ? Math.floor(dm / 60) + 'h' + String(dm % 60).padStart(2, '0') : '0h';
+  now.className = s.onBalcony ? 'sun' : ''; now.textContent = s.night ? 'Noite' : s.onBalcony ? 'Sol direto na varanda' : 'Varanda na sombra';
+}
+hour.addEventListener('input', () => { sunState.hour = +hour.value; sunUI(); });
+for (const [id, key] of [['season', 'season'], ['facing', 'facing']]) {
+  $('#' + id).addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    [...b.parentNode.children].forEach(x => x.classList.toggle('on', x === b));
+    sunState[key] = key === 'facing' ? +b.dataset.v : b.dataset.v; sunUI();
+  });
+}
+let playing = false, last = 0;
+const icon = p => $('#play').innerHTML = p ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>';
+function tick(ts) {
+  if (!playing) return;
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts;
+  let h = sunState.hour + dt * 1.6; if (h > 20) h = 4;                 // o dia inteiro passa em ~10 s
+  sunState.hour = h; hour.value = h; sunUI(); requestAnimationFrame(tick);
+}
+$('#play').addEventListener('click', () => { playing = !playing; icon(playing); if (playing) { last = performance.now(); requestAnimationFrame(tick); } });
+ready.then(sunUI);
+</script>
+</body>
+</html>

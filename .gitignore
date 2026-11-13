@@ -1,0 +1,10 @@
+# referências de terceiros (sites clonados, fotos e planta) não vão pro repositório
+refs/
+blender/renders/
+blender/*.blend
+blender/*.blend1
+.wrangler/
+node_modules/
+.DS_Store
+# fontes da marca: coloque as suas em site/fonts
+site/fonts/*.ttf
